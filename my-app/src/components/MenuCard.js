@@ -1,10 +1,9 @@
 export default function MenuCard({ title }) {
   return (
-    <button className="flex items-center justify-center w-full md:w-80 h-32 border-2 border-red-500/60 rounded-2xl bg-red-600/30 backdrop-blur-lg hover:bg-red-500/60 hover:border-red-400/80 transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_30px_rgba(255,0,0,0.5)] group px-4">
+    <button className="group flex h-28 w-full min-w-0 items-center justify-center rounded-xl border border-white/15 bg-white/[0.06] px-4 shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-cyan-200/40 hover:bg-white/[0.1] hover:shadow-[0_12px_40px_rgba(34,211,238,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200/70 sm:h-32 sm:last:col-span-2 sm:last:w-1/2 sm:last:justify-self-center lg:last:col-span-1 lg:last:w-full">
       
       <span 
-        className="text-5xl md:text-6xl font-black tracking-widest drop-shadow-[0_8px_16px_rgba(255,0,0,0.6)] [-webkit-text-stroke:1px_rgba(255,100,100,0.8)] group-hover:[-webkit-text-stroke:1px_rgba(255,200,200,1)] transition-all duration-300"
-        style={{ color: 'rgba(255, 30, 30, 0.5)' }}
+        className="text-3xl font-semibold tracking-wide text-white/90 transition-colors duration-300 group-hover:text-cyan-50 sm:text-4xl md:text-5xl"
       >
         {title}
       </span>

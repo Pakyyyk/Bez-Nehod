@@ -13,7 +13,6 @@
 
 @keyframes aurora-1 {
   0% {
-    /* Vše začíná přesně uprostřed (-50%, -50%) */
     transform: translate(-50%, -50%) rotate(0deg) scale(1);
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
   }
