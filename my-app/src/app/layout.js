@@ -11,9 +11,9 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="cs" className="dark">
-      <body className={`${jakarta.className} antialiased bg-[#0a0a0a] text-[#ededed]`}>
+return (
+    <html lang="cs" className="dark" suppressHydrationWarning>
+      <body className={`${jakarta.className} antialiased bg-surface text-ink`}>
         {children}
       </body>
     </html>
