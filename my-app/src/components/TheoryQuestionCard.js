@@ -4,9 +4,7 @@ export default function TheoryQuestionCard({
 }) {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center gap-6">
-      {/* Box vizualizace k dané otázce */}
-      <div className="relative w-full aspect-[16/9] max-h-[360px] rounded-2xl border border-white/15 bg-white/[0.05] shadow-[0_16px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl overflow-hidden flex items-center justify-center p-6">
-        {/* Úhlopříčky podle wireframe */}
+      <div className="relative w-full aspect-[16/9] max-h-[360px] rounded-2xl border border-glass-border bg-glass shadow-glass backdrop-blur-xl overflow-hidden flex items-center justify-center p-6">
         <div className="absolute inset-0 pointer-events-none opacity-20">
           <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
             <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" strokeWidth="0.3" />
@@ -14,17 +12,15 @@ export default function TheoryQuestionCard({
           </svg>
         </div>
 
-        {/* Středový štítek vizualizace */}
-        <div className="relative z-10 rounded-xl border border-white/15 bg-white/[0.06] px-6 py-4 backdrop-blur-md text-center shadow-lg">
-          <span className="text-base sm:text-lg font-medium tracking-wide text-white/85">
+        <div className="relative z-10 rounded-xl border border-glass-border bg-glass px-6 py-4 backdrop-blur-md text-center shadow-glass">
+          <span className="text-base sm:text-lg font-medium tracking-wide text-ink">
             {mediaLabel}
           </span>
         </div>
       </div>
 
-      {/* Text / tlačítko otázky */}
       <div className="w-full text-center px-2">
-        <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide text-white">
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide text-ink">
           {questionText}
         </h2>
       </div>

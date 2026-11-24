@@ -10,7 +10,7 @@ export default function UceniPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#ededed] flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-surface text-ink flex flex-col relative overflow-hidden transition-colors duration-300">
       <AuroraBackground theme="Učení" />
       <Navbar />
 
