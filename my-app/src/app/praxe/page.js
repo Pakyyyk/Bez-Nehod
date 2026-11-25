@@ -1,125 +1,129 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Navbar from '../../components/Navbar';
-import AuroraBackground from '../../components/AuroraBackground';
-import PracticalControls from '../../components/PracticalControls';
-import { PRACTICAL_SCENARIOS } from '../../data/questionsData';
+import { useState, useEffect, useCallback } from "react";
+import BottomControlBar from "@/components/BottomControlBar";
+// Pokud máš data v questionsData.js, odkomentuj řádek níže a doplň správný název exportu místo PRACTICAL_SITUATIONS:
+// import { PRACTICAL_SITUATIONS } from "@/data/questionsData";
 
-const DIRECTIONS = [
-  { id: 'vlevo', label: 'Vlevo', arrow: '↰' },
-  { id: 'rovne', label: 'Rovně', arrow: '↑' },
-  { id: 'vpravo', label: 'Vpravo', arrow: '↱' },
+const PRACTICAL_SITUATIONS = [
+  {
+    id: 1,
+    title: "Situace #1 - Křižovatka tvaru T",
+    question: "Jedeš po hlavní silnici rovně, z vedlejší ulice zprava vyjíždí osobní auto. Kam můžeš plynule pokračovat?",
+    correctDirection: "straight", // "left" | "straight" | "right"
+  },
+  {
+    id: 2,
+    title: "Situace #2 - Odbočování vlevo",
+    question: "Blížíš se ke křižovatce a dáváš přednost protijedoucím vozidlům. Jaký směr volíš?",
+    correctDirection: "left",
+  },
+  {
+    id: 3,
+    title: "Situace #3 - Kruhový objezd",
+    question: "Vyjíždíš prvním výjezdem z kruhového objezdu. Který směr zvolíš?",
+    correctDirection: "right",
+  },
 ];
 
 export default function PraxePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedActions, setSelectedActions] = useState({});
+  const [selectedDirection, setSelectedDirection] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(null);
 
-  const scenario = PRACTICAL_SCENARIOS[currentIndex];
-  const userAction = selectedActions[scenario.id];
-  const isAnswered = Boolean(userAction);
-  const isCorrect = userAction === scenario.correctAction;
+  const currentSituation = PRACTICAL_SITUATIONS[currentIndex];
 
-  const handleChooseAction = (actionId) => {
-    if (isAnswered) return;
-    setSelectedActions((prev) => ({
-      ...prev,
-      [scenario.id]: actionId,
-    }));
+  const directions = [
+    { id: "left", label: "Vlevo", icon: "↰", key: "ArrowLeft" },
+    { id: "straight", label: "Rovně", icon: "↑", key: "ArrowUp" },
+    { id: "right", label: "Vpravo", icon: "↱", key: "ArrowRight" },
+  ];
+
+  const handleDirectionSelect = useCallback(
+    (directionId) => {
+      if (selectedDirection || !currentSituation) return;
+
+      setSelectedDirection(directionId);
+      const correct = directionId === currentSituation.correctDirection;
+      setIsCorrect(correct);
+
+      setTimeout(() => {
+        setSelectedDirection(null);
+        setIsCorrect(null);
+        setCurrentIndex((prev) =>
+          prev < PRACTICAL_SITUATIONS.length - 1 ? prev + 1 : 0
+        );
+      }, 800);
+    },
+    [selectedDirection, currentSituation]
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const matched = directions.find((d) => d.key === e.key);
+      if (matched) {
+        e.preventDefault();
+        handleDirectionSelect(matched.id);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleDirectionSelect]);
+
+  const getButtonStyle = (dirId) => {
+    const baseStyle =
+      "flex flex-col items-center justify-center p-6 rounded-2xl border backdrop-blur-md transition-all duration-200 cursor-pointer select-none";
+
+    if (selectedDirection === dirId) {
+      return isCorrect
+        ? `${baseStyle} bg-emerald-500/30 border-emerald-400 text-white scale-105`
+        : `${baseStyle} bg-rose-500/30 border-rose-400 text-white scale-95`;
+    }
+
+    return `${baseStyle} bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40 text-white`;
   };
 
-  const getDirectionStyle = (dirId) => {
-    if (!isAnswered) {
-      return 'border-glass-border bg-glass text-ink hover:-translate-y-1 hover:border-amber-400/60 hover:bg-glass-hover';
-    }
-    if (dirId === scenario.correctAction) {
-      return 'border-emerald-500 bg-emerald-500/20 text-emerald-800 dark:text-emerald-200 shadow-[0_0_25px_rgba(16,185,129,0.25)]';
-    }
-    if (dirId === userAction) {
-      return 'border-rose-500 bg-rose-500/20 text-rose-800 dark:text-rose-200 shadow-[0_0_25px_rgba(244,63,94,0.25)]';
-    }
-    return 'border-glass-border bg-glass/50 text-ink-muted opacity-55';
-  };
+  if (!currentSituation) return null;
 
-  const getWaitStatus = () => {
-    if (!isAnswered) return 'default';
-    if (scenario.correctAction === 'cekat') return 'correct';
-    if (userAction === 'cekat') return 'wrong';
-    return 'default';
-  };
+  const statusText = selectedDirection
+    ? isCorrect
+      ? "Správně!"
+      : "Chyba!"
+    : "Vyber směr jízdy";
 
   return (
-    <div className="min-h-screen bg-surface text-ink flex flex-col relative overflow-hidden transition-colors duration-300">
-      <AuroraBackground theme="Praxe" />
-      <Navbar />
+    <main className="relative min-h-screen flex flex-col justify-between p-6">
+      <header className="flex justify-between items-center text-sm text-white/80">
+        <span>{currentSituation.title}</span>
+        <span>
+          Situace {currentIndex + 1} / {PRACTICAL_SITUATIONS.length}
+        </span>
+      </header>
 
-      <main className="relative z-10 flex-1 flex flex-col justify-between p-4 sm:p-6 md:p-8 min-h-screen">
-        <div className="relative flex-1 w-full rounded-2xl border border-glass-border bg-glass shadow-glass backdrop-blur-xl overflow-hidden flex flex-col justify-between p-4 sm:p-6 md:p-8">
-          <div className="absolute inset-0 pointer-events-none opacity-15">
-            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-              <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" strokeWidth="0.25" />
-              <line x1="100" y1="0" x2="0" y2="100" stroke="currentColor" strokeWidth="0.25" />
-            </svg>
-          </div>
-
-          <div className="relative z-10 flex items-center justify-between text-sm font-medium text-ink-muted">
-            <span>{scenario.title}</span>
-            <span>
-              Situace <strong className="text-ink">{currentIndex + 1}</strong> / {PRACTICAL_SCENARIOS.length}
-            </span>
-          </div>
-
-          <div className="relative z-10 my-auto flex flex-col items-center justify-center gap-6 text-center max-w-2xl mx-auto">
-            <div className="rounded-2xl border border-glass-border bg-glass px-6 py-5 backdrop-blur-md shadow-glass">
-              <p className="text-lg sm:text-2xl font-medium tracking-wide text-ink">
-                {scenario.situation}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 sm:gap-5 w-full">
-              {DIRECTIONS.map((dir) => (
-                <button
-                  key={dir.id}
-                  type="button"
-                  disabled={isAnswered}
-                  onClick={() => handleChooseAction(dir.id)}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-2xl border py-4 px-3 backdrop-blur-xl shadow-glass transition-all duration-200 cursor-pointer disabled:cursor-default ${getDirectionStyle(dir.id)}`}
-                >
-                  <span className="text-2xl sm:text-3xl font-bold">{dir.arrow}</span>
-                  <span className="text-sm sm:text-base font-semibold tracking-wide">{dir.label}</span>
-                </button>
-              ))}
-            </div>
-
-            {isAnswered && (
-              <div
-                className={`w-full rounded-2xl border px-5 py-3.5 text-sm sm:text-base font-medium backdrop-blur-md ${
-                  isCorrect
-                    ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-200'
-                    : 'border-rose-500/40 bg-rose-500/15 text-rose-700 dark:text-rose-200'
-                }`}
-              >
-                {isCorrect
-                  ? scenario.explanation
-                  : `Špatný směr! ${scenario.explanation}`}
-              </div>
-            )}
-          </div>
-
-          <div className="relative z-10 w-full pt-4">
-            <PracticalControls
-              waitLabel="čekat"
-              onWaitClick={() => handleChooseAction('cekat')}
-              waitStatus={getWaitStatus()}
-              onPrev={() => setCurrentIndex((i) => i - 1)}
-              onNext={() => setCurrentIndex((i) => i + 1)}
-              prevDisabled={currentIndex === 0}
-              nextDisabled={currentIndex === PRACTICAL_SCENARIOS.length - 1}
-            />
-          </div>
+      <section className="my-auto mx-auto w-full max-w-2xl flex flex-col gap-6">
+        <div className="p-6 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md text-center text-lg font-medium text-white">
+          {currentSituation.question}
         </div>
-      </main>
-    </div>
+
+        <div className="grid grid-cols-3 gap-4">
+          {directions.map((dir) => (
+            <button
+              key={dir.id}
+              type="button"
+              onClick={() => handleDirectionSelect(dir.id)}
+              disabled={selectedDirection !== null}
+              className={getButtonStyle(dir.id)}
+            >
+              <span className="text-2xl mb-2">{dir.icon}</span>
+              <span className="font-medium">{dir.label}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <footer className="w-full">
+        <BottomControlBar centerText={statusText} hideArrows={true} />
+      </footer>
+    </main>
   );
 }
