@@ -160,7 +160,7 @@ export default function PraxePage() {
 
   return (
     <div
-      className={`relative min-h-screen overflow-hidden transition-colors duration-300 ${
+      className={`relative h-dvh w-full overflow-hidden transition-colors duration-300 ${
         isDark ? "bg-[#0b0602] text-white" : "bg-[#fffaf3] text-stone-900"
       }`}
     >
@@ -177,10 +177,11 @@ export default function PraxePage() {
         }}
       />
 
-      <main className="relative z-10 h-screen w-full flex flex-col justify-between px-3 sm:px-6 pt-16 pb-5 gap-4">
+      {/* Odstraněno pt-16 a zmenšeny vnější okraje na p-2 sm:p-3 */}
+      <main className="relative z-10 h-dvh w-full flex flex-col justify-between p-2 sm:p-3 gap-2.5">
         {/* Velký celoobrazovkový rám pro vizuální ukázku */}
         <section
-          className={`relative flex-1 w-full rounded-2xl border backdrop-blur-xl overflow-hidden flex flex-col justify-between p-6 sm:p-10 transition-all duration-300 ${
+          className={`relative flex-1 w-full rounded-xl sm:rounded-2xl border backdrop-blur-xl overflow-hidden flex flex-col justify-between p-4 sm:p-6 transition-all duration-300 ${
             selectedAction
               ? isCorrect
                 ? isDark
@@ -242,7 +243,7 @@ export default function PraxePage() {
           </div>
 
           {/* Středový blok – vizuální ukázka */}
-          <div className="relative z-10 my-auto mx-auto max-w-3xl text-center flex flex-col items-center gap-4">
+          <div className="relative z-10 my-auto mx-auto max-w-4xl text-center flex flex-col items-center gap-4">
             <div
               className={`px-4 py-1.5 rounded-lg text-xs uppercase tracking-widest font-semibold border ${
                 isDark
@@ -253,7 +254,7 @@ export default function PraxePage() {
               Vizuální ukázka
             </div>
 
-            <p className="text-lg sm:text-2xl font-medium leading-relaxed">
+            <p className="text-xl sm:text-3xl font-medium leading-relaxed">
               {currentSituation.question}
             </p>
 
@@ -278,7 +279,7 @@ export default function PraxePage() {
             )}
           </div>
 
-          <div className="h-2" />
+          <div className="h-1" />
         </section>
 
         {/* Spodní lišta roztažená do stran */}
