@@ -8,11 +8,16 @@ export default function BottomControlBar({
   selectedAction = null,
   isCorrect = null,
   onActionSelect,
-  // Výchozí režim pro /teorie a /uceni
+  // Sjednocený režim pro /teorie a /uceni: [ ( < ) ]  [  nápověda / komplexní vysvětlení  ]  [ ( > ) ]
+  centerLabel = "",
   centerText = "",
+  accentColor = "default",
+  onCenterClick,
   hideArrows = false,
   onPrev,
   onNext,
+  prevDisabled = false,
+  nextDisabled = false,
   isDark: isDarkProp,
 }) {
   const [detectedDark, setDetectedDark] = useState(true);
@@ -224,44 +229,85 @@ export default function BottomControlBar({
     );
   }
 
-  // 2) VÝCHOZÍ REŽIM PRO OSTATNÍ STRÁNKY (/teorie, /uceni)
-  const defaultArrowStyle = isDark
-    ? "w-12 h-12 shrink-0 rounded-full bg-white/[0.06] hover:bg-white/[0.14] active:scale-95 border border-white/15 backdrop-blur-xl flex items-center justify-center text-white/90 transition cursor-pointer"
-    : "w-12 h-12 shrink-0 rounded-full bg-white/80 hover:bg-white active:scale-95 border border-stone-900/15 backdrop-blur-xl flex items-center justify-center text-stone-800 shadow-sm transition cursor-pointer";
+  // 2) SJEDNOCENÝ REŽIM PRO OSTATNÍ STRÁNKY (/teorie, /uceni/kategorie)
+  const label = centerLabel || centerText;
+
+  const accentStyles = {
+    emerald:
+      "bg-white/85 hover:bg-emerald-50 border-emerald-900/20 text-stone-900 shadow-sm dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 dark:border-emerald-400/35 dark:text-emerald-50 dark:shadow-lg dark:shadow-black/30",
+    rose:
+      "bg-white/85 hover:bg-rose-50 border-rose-900/20 text-stone-900 shadow-sm dark:bg-rose-950/40 dark:hover:bg-rose-900/60 dark:border-rose-400/35 dark:text-rose-50 dark:shadow-lg dark:shadow-black/30",
+    amber:
+      "bg-white/85 hover:bg-amber-50 border-amber-900/20 text-stone-900 shadow-sm dark:bg-amber-950/40 dark:hover:bg-amber-900/60 dark:border-amber-400/35 dark:text-amber-50 dark:shadow-lg dark:shadow-black/30",
+    default:
+      "bg-white/85 hover:bg-white border-stone-900/20 text-stone-900 shadow-sm dark:bg-white/[0.06] dark:hover:bg-white/[0.14] dark:border-white/20 dark:text-white/95 dark:shadow-lg dark:shadow-black/30",
+  };
+
+  const currentAccent = accentStyles[accentColor] || accentStyles.default;
+
+  const unifiedOvalBtnStyle =
+    "w-20 sm:w-28 h-12 shrink-0 rounded-full border backdrop-blur-xl flex items-center justify-center transition-all duration-150 cursor-pointer active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100";
+
+  const unifiedCenterBtnStyle =
+    "flex-1 h-12 px-6 rounded-full border backdrop-blur-xl flex items-center justify-center text-sm sm:text-base font-medium tracking-wide transition-all duration-150";
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex items-center gap-3 sm:gap-4">
+    <div className="w-full flex items-center gap-3 sm:gap-4 select-none">
       {!hideArrows && (
         <button
           type="button"
+          disabled={prevDisabled}
           onClick={onPrev}
           aria-label="Předchozí"
-          className={defaultArrowStyle}
+          className={`${unifiedOvalBtnStyle} ${currentAccent}`}
         >
-          ‹
+          <svg
+            viewBox="0 0 24 24"
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
       )}
 
-      <div
-        className={`flex-1 h-12 px-6 rounded-full border backdrop-blur-xl text-sm sm:text-base font-medium flex items-center justify-center ${
-          isDark
-            ? "bg-white/[0.06] border-white/15 text-white/90"
-            : "bg-white/80 border-stone-900/15 text-stone-800 shadow-sm"
+      <button
+        type="button"
+        onClick={onCenterClick}
+        className={`${unifiedCenterBtnStyle} ${currentAccent} ${
+          onCenterClick
+            ? "cursor-pointer active:scale-[0.99]"
+            : "cursor-default"
         }`}
       >
-        {centerText}
-      </div>
+        {label}
+      </button>
 
       {!hideArrows && (
         <button
           type="button"
+          disabled={nextDisabled}
           onClick={onNext}
           aria-label="Další"
-          className={defaultArrowStyle}
+          className={`${unifiedOvalBtnStyle} ${currentAccent}`}
         >
-          ›
+          <svg
+            viewBox="0 0 24 24"
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
       )}
     </div>
   );
-} 
+}

@@ -45,13 +45,19 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 ${
+                  className={`inline-grid place-items-center no-underline rounded-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 dark:focus-visible:ring-white/70 ${
                     isActive
-                      ? 'text-ink font-semibold underline decoration-cyan-400 decoration-2 underline-offset-8'
-                      : 'text-ink-muted hover:text-ink'
+                      ? 'text-ink font-bold [text-shadow:0_0_8px_rgba(15,23,42,0.18)] dark:[text-shadow:0_0_10px_rgba(255,255,255,0.45)] hover:[text-shadow:0_0_10px_rgba(15,23,42,0.24)] dark:hover:[text-shadow:0_0_12px_rgba(255,255,255,0.58)]'
+                      : 'text-ink-muted hover:text-ink hover:font-bold hover:[text-shadow:0_0_10px_rgba(15,23,42,0.22)] dark:hover:[text-shadow:0_0_12px_rgba(255,255,255,0.55)]'
                   }`}
                 >
-                  {link.label}
+                  <span className="col-start-1 row-start-1">{link.label}</span>
+                  <span
+                    aria-hidden="true"
+                    className="col-start-1 row-start-1 font-bold invisible pointer-events-none select-none"
+                  >
+                    {link.label}
+                  </span>
                 </Link>
               );
             })}

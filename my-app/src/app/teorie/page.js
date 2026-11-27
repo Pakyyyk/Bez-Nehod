@@ -47,7 +47,7 @@ export default function TeoriePage() {
       <AuroraBackground theme="Teorie" />
       <Navbar />
 
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-between w-full max-w-6xl mx-auto px-4 sm:px-8 pt-10 pb-6 gap-6">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-between w-full max-w-6xl mx-auto px-4 sm:px-8 pt-10 pb-4 gap-6">
         <div className="w-full max-w-4xl flex items-center justify-between text-sm font-medium text-ink-muted">
           <span>
             Otázka <strong className="text-ink">{currentIndex + 1}</strong> / {THEORY_QUESTIONS.length}
@@ -91,7 +91,9 @@ export default function TeoriePage() {
             />
           ))}
         </div>
+      </main>
 
+      <footer className="relative z-10 w-full shrink-0 px-2 sm:px-3 pb-2 sm:pb-3">
         <BottomControlBar
           centerLabel={showHint ? 'skrýt nápovědu' : 'nápověda'}
           accentColor="emerald"
@@ -101,7 +103,7 @@ export default function TeoriePage() {
           prevDisabled={currentIndex === 0}
           nextDisabled={currentIndex === THEORY_QUESTIONS.length - 1}
         />
-      </main>
+      </footer>
     </div>
   );
 }
